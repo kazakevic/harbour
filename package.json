@@ -2,8 +2,11 @@
   "name": "Harba",
   "version": "1.0.0",
   "dependencies": {
+    "axios": "^0.19.2",
     "google-maps-api-loader": "^1.1.1",
-    "vue": "^2.6.11"
+    "leaflet": "^1.6.0",
+    "vue": "^2.6.11",
+    "vue2-leaflet": "^2.5.2"
   },
   "devDependencies": {
     "cross-env": "^7.0.2",
