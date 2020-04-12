@@ -25,3 +25,12 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Service\Weather\StormGlassProviderService:
+        arguments:
+            - '6fe734f6-7ce2-11ea-a222-0242ac130002-6fe735b4-7ce2-11ea-a222-0242ac130002'
+
+    App\Service\Weather\OpenWeatherMapProviderService:
+        arguments:
+            - 'acf23f6fe04089b817adfc03b82d983b'
+
