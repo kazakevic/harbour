@@ -14,16 +14,9 @@
                     :attribution="attribution"
             />
             <div v-for="marker in markers">
-                <l-marker :lat-lng="marker" :icon="icon">
-                    <l-popup>
-                        <div>
-                            Weather
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-                                sed pretium nisl, ut sagittis sapien. Sed vel sollicitudin nisi.
-                                Donec finibus semper metus id malesuada.
-                            </p>
-                        </div>
+                <l-marker :lat-lng="marker.position" :icon="icon">
+                    //TODO
+                    <l-popup :content="marker.content">
                     </l-popup>
                 </l-marker>
             </div>
@@ -79,7 +72,10 @@
                     .then(response => {
                         response.data.forEach(harbour =>
                             this.markers.push(
-                                latLng(harbour.lat, harbour.lon)
+                                {
+                                    position: latLng(harbour.lat, harbour.lon),
+                                    content: this.getPopupContent(harbour),
+                                }
                             )
                         );
                         this.currentCenter = this.markers[0]
@@ -88,13 +84,19 @@
                         console.log(error);
                         this.errored = true
                     })
+            },
+            getPopupContent(harbour) {
+                let content = `<div><h2> ⛵ Harbour <b>${harbour.name}</b></h2>`;
+                content += `<span class="harbour-image">`;
+                content += `<img width="100px" height="100px" src="https://devapi.harba.co/${harbour.image}" />`;
+                content += `</span>`;
+                content += `<h2>Current weather ☀️</h2>`;
+                content += `<p>12344</p>`;
+                return '</div>' + content;
             }
         },
         mounted() {
             this.getHarbours();
-            // this.$nextTick(() => {
-            //     this.$refs.myMap.mapObject.setIcon('pngfuel.com.png');
-            // });
         },
     };
 </script>
