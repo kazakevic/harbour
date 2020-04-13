@@ -34,7 +34,7 @@ class WeatherService
         $this->weatherProviders[$name] = $service;
     }
 
-    public function getWeather(float $lon, float $lat): ?Weather
+    public function getWeather(float $lon, float $lat): Weather
     {
         foreach ($this->weatherProviders as $provider) {
             if ($provider->getWeather($lon, $lat)) {
@@ -48,7 +48,12 @@ class WeatherService
                 });
             }
         }
-        $this->logger->warning('All weather providers are not available');
-        return null;
+        $this->logger && $this->logger->warning('All weather providers are not available');
+        return new Weather(null, null);
+    }
+
+    public function setLogger(LoggerInterface $logger): void
+    {
+        $this->logger = $logger;
     }
 }

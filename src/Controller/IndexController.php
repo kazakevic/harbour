@@ -17,8 +17,14 @@ class IndexController extends AbstractController
 
     public function weather(Request $request, WeatherService $service)
     {
-        $lon = $request->get('lon');
-        $lat = $request->get('lat');
-        return new JsonResponse($service->getWeather($lon, $lat)->getAirTemperature());
+        if ($request->get('lon') && $request->get('lat')) {
+            $response = new JsonResponse($service->getWeather(
+                $request->get('lon'),
+                $request->get('lat')
+            )->getAirTemperature());
+        } else {
+            $response = new JsonResponse('Weather API error', 400);
+        }
+        return $response;
     }
 }

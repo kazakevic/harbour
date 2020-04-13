@@ -42,4 +42,5 @@ services:
         calls:
             - [addProvider, ['StormGlass', '@weather_providers_storm_glass_service']]
             - [addProvider, ['OpenWeatherMap', '@weather_providers_open_weather_map_service']]
+            - [setLogger, ['@logger']]
 

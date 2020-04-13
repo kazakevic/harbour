@@ -57,7 +57,7 @@ class StormGlassProviderService implements WeatherProviderInterface
             $responseData = \GuzzleHttp\json_decode($response->getBody()->getContents(), true);
             $data = $this->processResponse($responseData, $lon, $lat);
         } catch (RequestException $e) {
-            $this->logger->warning('Bad weather provider response', [
+            $this->logger && $this->logger->warning('Bad weather provider response', [
                 'provider' => self::PROVIDER_NAME,
                 'error' => $e->getMessage(),
                 'code' => $e->getCode()

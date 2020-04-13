@@ -4,10 +4,10 @@ namespace App\Model;
 
 class Weather
 {
-    /** @var float */
+    /** @var float|null */
     private $airTemperature;
 
-    /** @var string */
+    /** @var string|null */
     private $weatherProvider;
 
     /** @var float */
@@ -16,65 +16,47 @@ class Weather
     /** @var float */
     private $lat;
 
-    /**
-     * @return float
-     */
-    public function getAirTemperature(): float
+    public function __construct(?float $airTemperature = null, ?string  $weatherProvider = null)
+    {
+        $this->airTemperature = $airTemperature;
+        $this->weatherProvider = $weatherProvider;
+    }
+
+    public function getAirTemperature(): ?float
     {
         return $this->airTemperature;
     }
 
-    /**
-     * @param float $airTemperature
-     */
-    public function setAirTemperature(float $airTemperature): void
+    public function setAirTemperature(?float $airTemperature): void
     {
         $this->airTemperature = $airTemperature;
     }
 
-    /**
-     * @return string
-     */
-    public function getWeatherProvider(): string
+    public function getWeatherProvider(): ?string
     {
         return $this->weatherProvider;
     }
 
-    /**
-     * @param string $weatherProvider
-     */
-    public function setWeatherProvider(string $weatherProvider): void
+    public function setWeatherProvider(?string $weatherProvider): void
     {
         $this->weatherProvider = $weatherProvider;
     }
 
-    /**
-     * @return float
-     */
     public function getLon(): float
     {
         return $this->lon;
     }
 
-    /**
-     * @param float $lon
-     */
     public function setLon(float $lon): void
     {
         $this->lon = $lon;
     }
 
-    /**
-     * @return float
-     */
     public function getLat(): float
     {
         return $this->lat;
     }
 
-    /**
-     * @param float $lat
-     */
     public function setLat(float $lat): void
     {
         $this->lat = $lat;
