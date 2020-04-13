@@ -38,14 +38,14 @@
         },
         data() {
             return {
-                zoom: 2,
+                zoom: 3,
                 center: latLng(47.41322, -1.219482),
                 url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 attribution:
                     '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
                 currentZoom: 11.5,
                 currentCenter: latLng(14.5617, 121.0214),
-                showParagraph: false,
+                showParagraph: true,
                 mapOptions: {
                     zoomSnap: 0.5
                 },
@@ -81,8 +81,6 @@
                         this.currentCenter = this.markers[0]
                     })
                     .catch(error => {
-                        console.log(error);
-                        this.errored = true
                     })
             },
             getPopupContent(harbour, weather) {
@@ -95,11 +93,14 @@
                 content += `${harbourImage}`;
                 content += `</span>`;
                 content += `<h2>Current weather ☀️</h2>`;
-                content += `<p>${weather.airTemperature} °C</p>`;
-                content += `<p>Weather provider: <b>${weather.provider}</b></p>`;
+                if ('airTemperature' in weather) {
+                    content += `<p>${weather.airTemperature} °C</p>`;
+                    content += `<p>Weather provider: <b>${weather.provider}</b></p>`;
+                }
                 return '</div>' + content;
             },
             updateContent(marker) {
+                marker.content = `<img src='img/Gear-0.2s-54px.gif' alt='loading' />`;
                 axios
                     .get('/api/weather',{
                         params: {
@@ -111,7 +112,7 @@
                         marker.content = this.getPopupContent(marker.harbour, response.data)
                     })
                     .catch(error => {
-                        this.errored = true
+                        marker.content = this.getPopupContent(marker.harbour, {})
                     })
             }
         },
