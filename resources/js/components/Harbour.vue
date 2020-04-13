@@ -14,8 +14,7 @@
                     :attribution="attribution"
             />
             <div v-for="marker in markers">
-                <l-marker :lat-lng="marker.position" :icon="icon">
-                    //TODO
+                <l-marker :lat-lng="marker.position" :icon="icon" @click="updateContent(marker)">
                     <l-popup :content="marker.content">
                     </l-popup>
                 </l-marker>
@@ -74,7 +73,8 @@
                             this.markers.push(
                                 {
                                     position: latLng(harbour.lat, harbour.lon),
-                                    content: this.getPopupContent(harbour),
+                                    content: '',
+                                    harbour: harbour
                                 }
                             )
                         );
@@ -85,14 +85,29 @@
                         this.errored = true
                     })
             },
-            getPopupContent(harbour) {
+            getPopupContent(harbour, weather) {
                 let content = `<div><h2> ⛵ Harbour <b>${harbour.name}</b></h2>`;
                 content += `<span class="harbour-image">`;
                 content += `<img width="100px" height="100px" src="https://devapi.harba.co/${harbour.image}" />`;
                 content += `</span>`;
                 content += `<h2>Current weather ☀️</h2>`;
-                content += `<p>12344</p>`;
+                content += `<p>${weather} °C</p>`;
                 return '</div>' + content;
+            },
+            updateContent(marker) {
+                axios
+                    .get('/api/weather',{
+                        params: {
+                            lat: marker.harbour.lat,
+                            lon: marker.harbour.lon
+                        }
+                    })
+                    .then(response => {
+                        marker.content = this.getPopupContent(marker.harbour, response.data)
+                    })
+                    .catch(error => {
+                        this.errored = true
+                    })
             }
         },
         mounted() {

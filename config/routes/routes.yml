@@ -4,3 +4,6 @@ app_index:
   path: /
   controller: App\Controller\IndexController::index
 
+api_weather:
+  path: /api/weather
+  controller: App\Controller\IndexController::weather
