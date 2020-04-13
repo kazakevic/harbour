@@ -29,8 +29,15 @@ services:
     App\Service\Weather\StormGlassProviderService:
         arguments:
             - '6fe734f6-7ce2-11ea-a222-0242ac130002-6fe735b4-7ce2-11ea-a222-0242ac130002'
+            - '@logger'
 
     App\Service\Weather\OpenWeatherMapProviderService:
         arguments:
             - 'acf23f6fe04089b817adfc03b82d983b'
+            - '@logger'
+
+    App\Service\Weather\WeatherService:
+        calls:
+            - [addProvider, ['StormGlass', App\Service\Weather\StormGlassProviderService]]
+            - [addProvider, ['OpenWeatherMap', App\Service\Weather\OpenWeatherMapProviderService]]
 

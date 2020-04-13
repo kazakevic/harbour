@@ -2,6 +2,8 @@
 
 namespace App\Service\Weather;
 
+use App\Model\Weather;
+
 interface WeatherProviderInterface
 {
     /**
@@ -9,5 +11,5 @@ interface WeatherProviderInterface
      * @param float $lat
      * @return mixed[]
      */
-    public function getWeather(float $lon, float $lat): array;
+    public function getWeather(float $lon, float $lat): ?Weather;
 }

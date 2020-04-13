@@ -2,7 +2,10 @@
 
 namespace App\Service\Weather;
 
+use App\Model\Weather;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use Psr\Log\LoggerInterface;
 
 class OpenWeatherMapProviderService implements WeatherProviderInterface
 {
@@ -12,9 +15,15 @@ class OpenWeatherMapProviderService implements WeatherProviderInterface
     /** @var Client */
     private $client;
 
-    public function __construct(string $apiKey)
+    /** @var LoggerInterface */
+    private $logger;
+
+    private const PROVIDER_NAME = 'OpenWeatherMap';
+
+    public function __construct(string $apiKey, LoggerInterface $logger)
     {
         $this->apiKey = $apiKey;
+        $this->logger = $logger;
         $this->client = new Client([
             'base_uri' => 'https://api.openweathermap.org',
             'timeout'  => 2.0,
@@ -24,17 +33,37 @@ class OpenWeatherMapProviderService implements WeatherProviderInterface
     /**
      * @inheritDoc
      */
-    public function getWeather(float $lon, float $lat): array
+    public function getWeather(float $lon, float $lat): ?Weather
     {
-        $response = $this->client->get('/data/2.5/weather', [
-            'query' => [
-                'lon' => 1,
-                'lat' => 1,
-                'appid' => $this->apiKey
-            ]
-        ]);
+        $data = null;
+        try {
+            $response = $this->client->get('/data/2.5/weather', [
+                'query' => [
+                    'lon' => $lon,
+                    'lat' => $lat,
+                    'appid' => $this->apiKey,
+                    'units' => 'metric'
+                ]
+            ]);
+            $responseData = \GuzzleHttp\json_decode($response->getBody()->getContents(), true);
+            $data = $this->processResponse($responseData, $lon, $lat);
+        } catch (RequestException $e) {
+            $this->logger->warning('Bad weather provider response', [
+                'provider' => self::PROVIDER_NAME,
+                'error' => $e->getMessage(),
+                'code' => $e->getCode()
+            ]);
+        }
+        return $data;
+    }
 
-        $data = $response->getBody()->getContents();
-        //:TODO process data
+    private function processResponse(array $responseData, float $lon, float $lat): ?Weather
+    {
+        $weather = new Weather();
+        $weather->setLon($lon);
+        $weather->setLat($lat);
+        $weather->setWeatherProvider(self::PROVIDER_NAME);
+        $weather->setAirTemperature($responseData['main']['temp']);
+        return $weather;
     }
 }
