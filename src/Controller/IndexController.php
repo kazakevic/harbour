@@ -21,7 +21,7 @@ class IndexController extends AbstractController
             $response = new JsonResponse($service->getWeather(
                 $request->get('lon'),
                 $request->get('lat')
-            )->getAirTemperature());
+            )->getSerializedWeather());
         } else {
             $response = new JsonResponse('Weather API error', 400);
         }

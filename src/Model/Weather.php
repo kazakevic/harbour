@@ -61,4 +61,15 @@ class Weather
     {
         $this->lat = $lat;
     }
+
+    /**
+     * @return mixed[]
+     */
+    public function getSerializedWeather(): array
+    {
+        $data = [];
+        $data['airTemperature'] = $this->airTemperature ?? null;
+        $data['provider'] = $this->weatherProvider ?? null;
+        return array_filter($data);
+    }
 }

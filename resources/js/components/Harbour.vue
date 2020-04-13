@@ -95,7 +95,8 @@
                 content += `${harbourImage}`;
                 content += `</span>`;
                 content += `<h2>Current weather ☀️</h2>`;
-                content += `<p>${weather} °C</p>`;
+                content += `<p>${weather.airTemperature} °C</p>`;
+                content += `<p>Weather provider: <b>${weather.provider}</b></p>`;
                 return '</div>' + content;
             },
             updateContent(marker) {
