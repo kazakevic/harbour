@@ -52,7 +52,7 @@
                 showMap: true,
                 markers: [],
                 icon: icon({
-                    iconUrl:'pngfuel.com.png',
+                    iconUrl:'/img/pngfuel.com.png',
                     iconSize: [20, 20],
                     iconAnchor: [16, 37]
                 }),
@@ -86,9 +86,13 @@
                     })
             },
             getPopupContent(harbour, weather) {
-                let content = `<div><h2> ⛵ Harbour <b>${harbour.name}</b></h2>`;
+                let content = `<div><h2>${harbour.name}</h2>`;
                 content += `<span class="harbour-image">`;
-                content += `<img width="100px" height="100px" src="https://devapi.harba.co/${harbour.image}" />`;
+                let harbourImage = `<img src='/img/no_photo.png' alt='${harbour.name}'/>`;
+                if ('image' in harbour) {
+                    harbourImage = `<img src='https://devapi.harba.co/${harbour.image}' alt='${harbour.name}'/>`;
+                }
+                content += `${harbourImage}`;
                 content += `</span>`;
                 content += `<h2>Current weather ☀️</h2>`;
                 content += `<p>${weather} °C</p>`;
